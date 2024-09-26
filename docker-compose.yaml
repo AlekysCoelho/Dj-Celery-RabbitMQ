@@ -1,0 +1,10 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4.0.0-management-alpine
+    container_name: container_rabbitmq
+    ports:
+      - "8072:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}

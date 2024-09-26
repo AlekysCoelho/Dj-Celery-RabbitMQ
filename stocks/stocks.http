@@ -1,0 +1,14 @@
+# HOSTNAME
+@hostname = http://127.0.0.1:8000/api-v1
+
+# GET {{hostname}}/stocks/tickers/
+
+
+POST {{hostname}}/stocks/ticker/
+Content-Type: application/json
+
+{
+    "ticker": "NVDA"
+}
+
+# NVDA IVVB11.SA VALE3.SA PETR4.SA

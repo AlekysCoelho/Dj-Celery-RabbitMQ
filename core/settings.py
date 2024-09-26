@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Third-party Apps
+    "django_celery_results",
+    "django_celery_beat",
     # Local Apps
     "stocks.apps.StocksConfig",
 ]
@@ -95,9 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-BR"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Sao_Paulo"
 
 USE_I18N = True
 
@@ -113,3 +117,28 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# CELERY
+
+RABBITMQ_DEFAULT_USER = config("RABBITMQ_DEFAULT_USER")
+RABBITMQ_DEFAULT_PASS = config("RABBITMQ_DEFAULT_PASS")
+
+CELERY_BROKER_URL = (
+    f"pyamqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@localhost:5672//"
+)
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_TIMEZONE = "America/Sao_Paulo"
+
+# CELERY ROUTES
+
+CELERY_ROUTES = {
+    "stocks.tasks.update_tickers_everyday": {"queue": "update_tickers_everyday"},
+    "stocks.tasks.api_stock": {"queue": "api_stock"},
+}
+
+# CELERY BEAT
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

@@ -16,4 +16,4 @@ class Stock(models.Model):
     moment = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.ticker} - R$ {self.current_price}"
+        return f"{self.ticker}"
